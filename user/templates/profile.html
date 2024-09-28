@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<a href="{% url 'edit-profile' %}">
+    <h2 class="btn btn-warning m-2">Edit profile</h2>
+</a>
+
+<h3 class="m-2">Total Orders: {{orders|length}}</h3>
+<div class="row mx-5">
+    {% for order in orders %}
+    <div class="card col-3 gap-4 mx-3 my-4">
+        <img src="{{ order.car.image.url }}" alt="{{ car.title }}"  style="height: 200px;">
+        <div class="card-body">
+          <h5 class="card-title">{{ order.car.title }}</h5>
+          <p class="card-text">Price: ${{ order.car.price }}</p>
+          <p class="card-text">Brand: {{order.car.brand}}</p>
+          <a href="{% url 'comments' order.car.id %}"> 
+            <button class="btn btn-warning"> View Details </button> 
+          </a>
+        </div>
+      </div>
+    {% endfor %}
+</div>
+{% endblock %}

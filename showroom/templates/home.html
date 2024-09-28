@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+  <div class="d-flex flex-wrap px-5 pt-3 align-items-center">
+
+    <div class="col-6">
+      <h1>Welcome to Auto Market</h1>
+      <p>Discover your dream car at Auto Market! We offer a wide selection of new and used vehicles from top brands, all in one convenient place. Our user-friendly website makes it easy to search, compare, and find the perfect car for your needs. With our expert advice and hassle-free buying process, Auto Market is your go-to source for reliable and affordable cars.</p>
+    </div>
+    <div class="col-6 ">
+  <img src="{% static 'fm.jpg' %}" />
+    </div>
+  </div>
+
+
+    {% for brand in brands %}
+        <a href="{% url 'home_by_brand' brand.slug %}">
+            <button class="btn btn-secondary p-2 m-2 ms-4 my-4" style="width: 280px;">{{ brand.name }}</button>
+        </a>
+    {% endfor %}
+
+    
+
+<h3 class="ms-5 text-center btn btn-success">Total Car Found: {{cars|length}}</h3>
+
+<div class="row mx-5">
+    {% for car in cars %}
+    <div class="card col-3 gap-4 my-4">
+        <img src="{{ car.image.url }}" alt="{{ car.title }}"  style="height: 200px;">
+        <div class="card-body">
+          <h5 class="card-title">{{ car.title }}</h5>
+          <p class="card-text">Price: ${{ car.price }}</p>
+          <p class="card-text">Brand: {{car.brand}}</p>
+          <a href="{% url 'comments' car.id %}"> 
+            <button class="btn btn-warning"> View Details </button> 
+          </a>
+        </div>
+      </div>
+    {% endfor %}
+</div>
+{% endblock %}

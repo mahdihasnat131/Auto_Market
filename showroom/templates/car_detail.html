@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<section class="mt-4 row mx-3">
+    <div class="col-5">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ car.title }}</h5>
+                <p class="card-text">{{ car.description }}.</p>
+                <p>Brand: {{ car.brand.name }}</p>
+                <p>Price: ${{ car.price }}</p>
+                <p>Quantity: {{ car.quantity }}</p>
+                {% if user.is_authenticated %}
+                <form method="post" action="{% url 'buy_car' car.id %}">
+                    {% csrf_token %}
+                    {% if car.quantity > 0 %}
+                    <button class="btn btn-success" type="submit">Buy Now</button>
+                    {% else%}
+                    <button class="btn btn-danger" disabled>Out of stock</button>
+                    <p class="text-danger">This item is out of stock now. Please choose another one</p>
+                    {% endif %}
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-7">
+        <img class="w-75" src="{{ car.image.url }}" alt="{{ car.title }}">
+    </div>
+</section>
+
+<section class="row mx-4  my-4">
+    <div class="col-3">
+        <h2>Comments</h2>
+        <p>Total comments: {{comments|length}}</p>
+        {% csrf_token %}
+        {% for comment in comments %}
+
+        <div class="card text-dark bg-light mb-3" style="max-width: 18rem;">
+            <div class="card-header">{{ comment.name }}
+                <small class="text-muted ms-5">{{ comment.created_on|date:"g:i a" }}</small>
+            </div>
+            <div class="card-body">
+                <p class="card-text"> {{ comment.comment }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="col-6">
+        <h2>Leave a Comment</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ comment_form | crispy }}
+            <button class="btn btn-warning" type="submit">Add Comment</button>
+        </form>
+    </div>
+
+</section>
+{% endblock %}
